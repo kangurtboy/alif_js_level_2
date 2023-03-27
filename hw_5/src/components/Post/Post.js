@@ -2,8 +2,9 @@ import Tags from '../Tags/Tags';
 import  './Post.css';
 
 function Post({ post }) {
-  const { author, photo, tags } = post;
+  const { author, photo, tags , onRemove} = post;
   const likeState = post.likedByMe ? 'liked' : 'unliked';
+	
   return (
     <article>
       <header>
@@ -17,6 +18,7 @@ function Post({ post }) {
           />
         )}
         <h5>{author.name}</h5>
+		<button onClick = {onRemove}>удалить</button>
         <div>{post.created}</div>
         {post.hit && <span>HIT</span>}
       </header>
