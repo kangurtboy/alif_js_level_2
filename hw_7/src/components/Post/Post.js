@@ -4,7 +4,7 @@ import './Post.css';
 function Post({ post, onRemove, onHide }) {
   const { author, photo, tags } = post;
   const likeState = post.likedByMe ? 'liked' : 'unliked';
-  const hideButtonState = post.hidden ? 'скрыть' : 'показать';
+  const hideButtonState = !post.hidden ? 'скрыть' : 'показать';
   const handleClick = () => {
     onRemove(post.id);
   };
@@ -30,7 +30,7 @@ function Post({ post, onRemove, onHide }) {
         <div>{post.created}</div>
         {post.hit && <span>HIT</span>}
       </header>
-      {post.hidden && (
+      {!post.hidden ? (
         <div>
           <div>
             <div className="Post-content">{post.content}</div>
@@ -51,6 +51,8 @@ function Post({ post, onRemove, onHide }) {
             </span>
           </footer>
         </div>
+      ) : (
+        <></>
       )}
     </article>
   );

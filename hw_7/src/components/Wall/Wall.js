@@ -65,19 +65,16 @@ function Wall() {
 
   return (
     <>
-      <div className="PostForm">
-        <PostForm onSave={handleSave} />
-      </div>
-      <div className="Wall">
-        {posts.map((post, id) => (
+      <PostForm onSave={handleSave} />
+      {posts.map((post, id) => (
+        <div  key={id}>
           <Post
             post={post}
-            key={id}
             onRemove={handlePostRemove}
             onHide={handleHidde}
           />
-        ))}
-      </div>
+        </div>
+      ))}
     </>
   );
 }
