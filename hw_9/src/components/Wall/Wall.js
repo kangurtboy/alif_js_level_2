@@ -13,8 +13,8 @@ function Wall() {
       content: 'Ну как, вы справились с домашкой?',
       photo: null,
       hit: true,
-      likedByMe: true,
-      likes: 222,
+      likedByMe: false,
+      likes: 0,
       tags: ['deadline', 'homework'],
       created: 1603774800,
       hidden: false,
@@ -38,12 +38,14 @@ function Wall() {
       hidden: true,
     },
   ]);
-  const [selecTedPost, setSelectedPost] = useState(null);
+  const [edit, setEdit] = useState(false);
+  const [selecTedPost, setSelectedPost] = useState(undefined);
   const handlePostRemove = (postID) => {
     setPosts((prev) => {
       return prev.filter((prevPost) => postID !== prevPost.id);
     });
   };
+
   const handleHidde = (postID) => {
     setPosts((prevState) => {
       return prevState.map((item) => {
@@ -76,15 +78,29 @@ function Wall() {
     });
     setSelectedPost(null);
   };
+
   const handleEdit = (post) => {
     setSelectedPost(() => {
       const nextState = posts.find((item) => item.id === post);
+      setEdit(true);
       return nextState;
     });
   };
+  const handleFormEdit = (post) => {};
+  const handleCancel = (post) => {
+    setEdit(false);
+    setSelectedPost(post);
+  };
+
   return (
     <>
-      <PostForm onSave={handleSave} postToEdit={selecTedPost} />
+      <PostForm
+        onSave={handleSave}
+        edited={selecTedPost}
+        onCancel={handleCancel}
+        edit={edit}
+        onEdit={handleFormEdit}
+      />
       {posts.map((post, id) => (
         <div key={id}>
           <Post

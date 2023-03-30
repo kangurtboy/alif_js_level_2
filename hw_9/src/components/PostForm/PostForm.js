@@ -1,20 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react';
 const empty = {
-  id: 0,
+  id: 1,
   author: {
-    avatar: 'https://alif-skills.pro/media/logo_alif.svg',
-    name: 'Alif Skills',
+    avatar: 'https://alif-skills.pro/media/logo_js.svg',
+    name: 'Alif',
+    id: 1,
   },
   content: '',
   photo: null,
-  hit: false,
-  likes: 0,
-  likedByMe: false,
+  hit: true,
+  likes: 10,
+  likedByMe: true,
   hidden: false,
   tags: [],
-  created: 0,
+  created: 1603501200,
 };
-function PostForm({ onSave, postToEdit = empty }) {
+function PostForm({ onSave, edited = empty, onCancel, edit, onEdit }) {
   const [post, setPost] = useState(empty);
   const firstFocusEl = useRef(null);
 
@@ -29,12 +30,13 @@ function PostForm({ onSave, postToEdit = empty }) {
     const photo = { url: post.photo?.url, alt: post.photo?.alt || '' };
     onSave({
       ...post,
-      id: postToEdit?.id ? postToEdit.id : Date.now(),
-      created: Date.now(),
+      id: edited?.id ? edited.id : Date.now(),
+      created: edited ? edited.created : Date.now(),
       tags,
       photo: !photo.url ? null : photo,
     });
-    setPost(empty);
+
+    setPost(post);
     firstFocusEl.current.focus();
   };
   const handleChange = (evt) => {
@@ -71,15 +73,26 @@ function PostForm({ onSave, postToEdit = empty }) {
       return;
     }
 
-    setPost((prevState) => ({ ...prevState, [name]: value }));
+    setPost((prevState) => {
+      return { ...prevState, [name]: value };
+    });
   };
-  
+
+  const handleCancel = (evt) => {
+    evt.preventDefault();
+    setPost(empty);
+    onEdit(edited);
+  };
+
   useEffect(() => {
-    if (postToEdit) {
-      setPost(postToEdit);
+    if (edit) {
+      onEdit(edited);
+      setPost(edited);
       return;
     }
-  }, [postToEdit]);
+    setPost(post);
+  }, [edited, onEdit, edit, post]);
+
   return (
     <form onSubmit={handleSubmit}>
       <textarea
@@ -108,6 +121,11 @@ function PostForm({ onSave, postToEdit = empty }) {
         onChange={handleChange}
       ></input>
       <button>Ok</button>
+      {edit ? (
+        <button type="button" onClick={handleCancel}>
+          Отменить
+        </button>
+      ) : null}
     </form>
   );
 }
