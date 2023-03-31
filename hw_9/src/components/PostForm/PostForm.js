@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 const empty = {
-  id: 1,
+  id: 0,
   author: {
     avatar: 'https://alif-skills.pro/media/logo_js.svg',
     name: 'Alif',
@@ -15,7 +15,7 @@ const empty = {
   tags: [],
   created: 1603501200,
 };
-function PostForm({ onSave, edited = empty, onCancel, edit, onEdit }) {
+function PostForm({ onSave, edited = empty, onCancel, edit, onFormEdit }) {
   const [post, setPost] = useState(empty);
   const firstFocusEl = useRef(null);
 
@@ -35,7 +35,6 @@ function PostForm({ onSave, edited = empty, onCancel, edit, onEdit }) {
       tags,
       photo: !photo.url ? null : photo,
     });
-
     setPost(post);
     firstFocusEl.current.focus();
   };
@@ -81,52 +80,48 @@ function PostForm({ onSave, edited = empty, onCancel, edit, onEdit }) {
   const handleCancel = (evt) => {
     evt.preventDefault();
     setPost(empty);
-    onEdit(edited);
+    onCancel();
   };
 
   useEffect(() => {
-    if (edit) {
-      onEdit(edited);
-      setPost(edited);
-      return;
+    if (typeof onFormEdit === 'function') {
+      onFormEdit(edited);
     }
-    setPost(post);
-  }, [edited, onEdit, edit, post]);
+    setPost(edited);
+  }, [edited, onFormEdit, edit]);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <textarea
-        name="content"
-        placeholder="content"
-        value={post?.content || ''}
-        onChange={handleChange}
-        ref={firstFocusEl}
-      ></textarea>
-      <input
-        name="tags"
-        placeholder="tags"
-        value={post?.tags?.join(' ') || ''}
-        onChange={handleChange}
-      ></input>
-      <input
-        name="photo"
-        placeholder="photo"
-        value={post?.photo?.url || ''}
-        onChange={handleChange}
-      ></input>
-      <input
-        name="alt"
-        placeholder="alt"
-        value={post?.photo?.alt || ''}
-        onChange={handleChange}
-      ></input>
-      <button>Ok</button>
-      {edit ? (
-        <button type="button" onClick={handleCancel}>
-          Отменить
-        </button>
-      ) : null}
-    </form>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <textarea
+          name="content"
+          placeholder="content"
+          value={post?.content || ''}
+          onChange={handleChange}
+          ref={firstFocusEl}
+        ></textarea>
+        <input
+          name="tags"
+          placeholder="tags"
+          value={post?.tags?.join(' ') || ''}
+          onChange={handleChange}
+        ></input>
+        <input
+          name="photo"
+          placeholder="photo"
+          value={post?.photo?.url || ''}
+          onChange={handleChange}
+        ></input>
+        <input
+          name="alt"
+          placeholder="alt"
+          value={post?.photo?.alt || ''}
+          onChange={handleChange}
+        ></input>
+        <button>Ok</button>
+        {edited !== empty && <button onClick={handleCancel}>Отменить</button>}
+      </form>
+    </div>
   );
 }
 

@@ -7,6 +7,7 @@ function Wall() {
     {
       id: 2,
       author: {
+        id: 3,
         avatar: 'https://alif-skills.pro/media/logo_alif.svg',
         name: 'Alif Skills',
       },
@@ -39,7 +40,7 @@ function Wall() {
     },
   ]);
   const [edit, setEdit] = useState(false);
-  const [selecTedPost, setSelectedPost] = useState(undefined);
+  const [selecTedPost, setSelectedPost] = useState();
   const handlePostRemove = (postID) => {
     setPosts((prev) => {
       return prev.filter((prevPost) => postID !== prevPost.id);
@@ -64,7 +65,6 @@ function Wall() {
     setPosts((prev) => {
       const newState = [...prev];
       const exitedPost = prev.find((item) => item.id === post.id);
-
       if (exitedPost) {
         const result = newState.map((item) => {
           if (item.id === post.id) {
@@ -76,7 +76,7 @@ function Wall() {
       }
       return [{ ...post }, ...prev];
     });
-    setSelectedPost(null);
+    setSelectedPost(undefined);
   };
 
   const handleEdit = (post) => {
@@ -86,7 +86,19 @@ function Wall() {
       return nextState;
     });
   };
-  const handleFormEdit = (post) => {};
+
+  const handleFormEdit = (post) => {
+    const exitedPost = posts.find((item) => item.id === post.id);
+    if (post && post?.id !== 0 && exitedPost) {
+      setEdit(true);
+      setSelectedPost(post);
+    }
+    if (post.id === 0 || !exitedPost) {
+      setEdit(false);
+      setSelectedPost(post);
+      console.log(post);
+    }
+  };
   const handleCancel = (post) => {
     setEdit(false);
     setSelectedPost(post);
@@ -99,7 +111,7 @@ function Wall() {
         edited={selecTedPost}
         onCancel={handleCancel}
         edit={edit}
-        onEdit={handleFormEdit}
+        onFormEdit={handleFormEdit}
       />
       {posts.map((post, id) => (
         <div key={id}>
