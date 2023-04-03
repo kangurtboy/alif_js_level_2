@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
+
 const empty = {
+	//Пустой пост по умолчанию
   id: 0,
   author: {
     avatar: 'https://alif-skills.pro/media/logo_js.svg',
@@ -15,7 +17,9 @@ const empty = {
   tags: [],
   created: 1603501200,
 };
+
 function PostForm({ onSave, edited = empty, onCancel, edit, onFormEdit }) {
+
   const [post, setPost] = useState(empty);
   const firstFocusEl = useRef(null);
 
@@ -38,6 +42,7 @@ function PostForm({ onSave, edited = empty, onCancel, edit, onFormEdit }) {
     setPost(post);
     firstFocusEl.current.focus();
   };
+
   const handleChange = (evt) => {
     // обработчик ввода
     const { name, value } = evt.target;
@@ -78,12 +83,14 @@ function PostForm({ onSave, edited = empty, onCancel, edit, onFormEdit }) {
   };
 
   const handleCancel = (evt) => {
+	//Отмена редактирование
     evt.preventDefault();
     setPost(empty);
     onCancel();
   };
 
   useEffect(() => {
+	//отслеживание состаяние редактируюмого поста
     if (typeof onFormEdit === 'function') {
       onFormEdit(edited);
     }

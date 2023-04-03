@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 
 function Wall() {
   const [posts, setPosts] = useState([
+    //Посты по умолчанию
     {
       id: 2,
       author: {
@@ -39,15 +40,19 @@ function Wall() {
       hidden: true,
     },
   ]);
+
   const [edit, setEdit] = useState(false);
   const [selecTedPost, setSelectedPost] = useState();
+
   const handlePostRemove = (postID) => {
+    //Обработчик удаления поста
     setPosts((prev) => {
       return prev.filter((prevPost) => postID !== prevPost.id);
     });
   };
 
   const handleHidde = (postID) => {
+    //Обработчик скыритие поста
     setPosts((prevState) => {
       return prevState.map((item) => {
         const post = item;
@@ -62,6 +67,7 @@ function Wall() {
   };
 
   const handleSave = (post) => {
+    //Обработчик сохранения нового поста или редактирование существующего поста
     setPosts((prev) => {
       const newState = [...prev];
       const exitedPost = prev.find((item) => item.id === post.id);
@@ -80,6 +86,7 @@ function Wall() {
   };
 
   const handleEdit = (post) => {
+    //Обработчик на кнопке изменить
     setSelectedPost(() => {
       const nextState = posts.find((item) => item.id === post);
       setEdit(true);
@@ -88,6 +95,7 @@ function Wall() {
   };
 
   const handleFormEdit = (post) => {
+    //Обработчик форма редактирование
     const exitedPost = posts.find((item) => item.id === post.id);
     if (post && post?.id !== 0 && exitedPost) {
       setEdit(true);
@@ -96,10 +104,11 @@ function Wall() {
     if (post.id === 0 || !exitedPost) {
       setEdit(false);
       setSelectedPost(post);
-      console.log(post);
     }
   };
+
   const handleCancel = (post) => {
+    //Обработчик отмена редактирование
     setEdit(false);
     setSelectedPost(post);
   };

@@ -1,19 +1,26 @@
 import Tags from '../Tags/Tags';
 import './Post.css';
 
-function Post({ post, onRemove, onHide , onEdit }) {
+function Post({ post, onRemove, onHide, onEdit }) {
   const { author, photo, tags } = post;
   const likeState = post.likedByMe ? 'liked' : 'unliked';
   const hideButtonState = !post.hidden ? 'скрыть' : 'показать';
+
   const handleClick = () => {
+    //Обработчик для удаления поста
     onRemove(post.id);
   };
+
   const handleHidding = () => {
+    //Обработчик для сокрытия поста
     onHide(post.id);
   };
-  const handleEdit = ()=>{
-	onEdit(post.id);
-  }
+
+  const handleEdit = () => {
+    //Обработчик для редактирование выбраного поста
+    onEdit(post.id);
+  };
+
   return (
     <article>
       <header>
