@@ -1,101 +1,38 @@
 import React, { useState, useRef, useEffect } from 'react';
+import PostsProvider from '../../contexts/PostsProvider';
 
-const empty = {
-	//Пустой пост по умолчанию
-  id: 0,
-  author: {
-    avatar: 'https://alif-skills.pro/media/logo_js.svg',
-    name: 'Alif',
-    id: 1,
-  },
-  content: '',
-  photo: null,
-  hit: true,
-  likes: 10,
-  likedByMe: true,
-  hidden: false,
-  tags: [],
-  created: 1603501200,
-};
-
-function PostForm({ onSave, edited = empty, onCancel, edit, onFormEdit }) {
-
-  const [post, setPost] = useState(empty);
+function PostForm() {
+  const {
+    save,
+    cancel,
+    edited: post,
+    setEdited: setPost,
+  } = useContext(PostsContext);
   const firstFocusEl = useRef(null);
 
   const handleSubmit = (evt) => {
-    //отправка данных
-    evt.preventDefault();
-    const parsed =
-      post.tags
-        ?.map((o) => o.replace('#', ''))
-        .filter((o) => o.trim() !== '') || [];
-    const tags = parsed.length > 0 ? parsed : null;
-    const photo = { url: post.photo?.url, alt: post.photo?.alt || '' };
-    onSave({
-      ...post,
-      id: edited?.id ? edited.id : Date.now(),
-      created: edited ? edited.created : Date.now(),
-      tags,
-      photo: !photo.url ? null : photo,
-    });
-    setPost(post);
     firstFocusEl.current.focus();
+    submit();
+  };
+
+  const handleReset = (evt) => {
+    evt.preventDefault();
+    cancel();
   };
 
   const handleChange = (evt) => {
-    // обработчик ввода
     const { name, value } = evt.target;
-    if (name === 'tags') {
-      setPost((prevState) => ({ ...prevState, [name]: value.split(' ') }));
-      return;
-    }
-
-    if (name === 'photo') {
-      setPost((prevState) => {
-        const nextState = { ...prevState };
-        if (nextState.photo) {
-          nextState.photo.url = value;
-          return nextState;
-        }
-        nextState.photo = { url: value };
-        return nextState;
-      });
-      return;
-    }
-    if (name === 'alt') {
-      setPost((prevState) => {
-        const nextState = { ...prevState };
-
-        if (nextState.photo) {
-          nextState.photo.alt = value;
-          return nextState;
-        }
-        nextState.photo = { alt: value };
-        return nextState;
-      });
-      return;
-    }
-
-    setPost((prevState) => {
-      return { ...prevState, [name]: value };
-    });
+    change({ name, value });
   };
 
-  const handleCancel = (evt) => {
-	//Отмена редактирование
-    evt.preventDefault();
-    setPost(empty);
-    onCancel();
-  };
 
-  useEffect(() => {
-	//отслеживание состаяние редактируюмого поста
-    if (typeof onFormEdit === 'function') {
-      onFormEdit(edited);
-    }
-    setPost(edited);
-  }, [edited, onFormEdit, edit]);
+//   useEffect(() => {
+//     //отслеживание состаяние редактируюмого поста
+//     if (typeof onFormEdit === 'function') {
+//       onFormEdit(edited);
+//     }
+//     setPost(edited);
+//   }, [edited, onFormEdit, edit]);
 
   return (
     <div>
@@ -126,7 +63,7 @@ function PostForm({ onSave, edited = empty, onCancel, edit, onFormEdit }) {
           onChange={handleChange}
         ></input>
         <button>Ok</button>
-        {edited !== empty && <button onClick={handleCancel}>Отменить</button>}
+        {edited !== empty && <button onClick={handleReset}>Отменить</button>}
       </form>
     </div>
   );
