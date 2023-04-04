@@ -5,7 +5,7 @@ import PostsContext from '../../contexts/PostsContext';
 
 function Post({ post }) {
   const { author, photo  , tags} = post;
-  const { like, remove, toggleVisibility, edit } = useContext(PostsContext);
+  const { like, remove, toggleVisiblity, edit } = useContext(PostsContext);
   const likeState = post.likedByMe ? 'liked' : 'unliked';
   const hideButtonState = !post.hidden ? 'скрыть' : 'показать';
 
@@ -15,8 +15,8 @@ function Post({ post }) {
   };
 
   const handleHidding = () => {
-    //Обработчик для сокрытия поста
-    toggleVisibility(post.id);
+    //Обработчик для переключение видимости поста
+    toggleVisiblity(post.id);
   };
 
   const handleEdit = () => {

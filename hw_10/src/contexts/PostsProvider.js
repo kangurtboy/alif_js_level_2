@@ -81,7 +81,6 @@ export default function PostsProvider(props) {
   };
 
   const save = (post) => {
-    console.log(post);
     //Сохранение поста
     const exitedPost = posts.find((item) => item.id === post.id);
     if (post?.id !== empty.id && exitedPost?.id !== post.id) {
