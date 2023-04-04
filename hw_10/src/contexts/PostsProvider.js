@@ -46,7 +46,7 @@ export default function PostsProvider(props) {
   };
 
   const save = (post) => {
-	//Сохранение поста
+    //Сохранение поста
     if (edited?.id === 0) {
       setPosts((prevState) => [{ ...post }, ...prevState]);
       setEdited(empty);
@@ -63,23 +63,23 @@ export default function PostsProvider(props) {
     setEdited(empty);
     return;
   };
-
+  
   const edit = (post) => {
     //Обработчик на кнопке изменить
-    setSelectedPost(() => {
+    setEdited(() => {
       const nextState = posts.find((item) => item.id === post);
       return nextState;
     });
   };
 
-  const formEdit = (post) => {
+  const change = (post) => {
     //Обработчик форма редактирование
     const exitedPost = posts.find((item) => item.id === post.id);
     if (post && post?.id !== 0 && exitedPost) {
-      setSelectedPost(post);
+      setEdited(post);
     }
     if (post.id === 0 || !exitedPost) {
-      setSelectedPost(post);
+      setEdited(post);
     }
   };
 
@@ -90,13 +90,12 @@ export default function PostsProvider(props) {
 
   const value = {
     posts,
-    edited,
     remove,
     toggleVisiblity,
     save,
-    edit,
-    formEdit,
+    change,
     cancel,
+	edit
   };
 
   return (

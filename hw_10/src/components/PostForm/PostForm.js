@@ -1,18 +1,15 @@
-import React, { useState, useRef, useEffect } from 'react';
-import PostsProvider from '../../contexts/PostsProvider';
+import React, { useRef, useContext } from 'react';
+import PostsContext from '../../contexts/PostsContext';
 
 function PostForm() {
-  const {
-    save,
-    cancel,
-    edited: post,
-    setEdited: setPost,
-  } = useContext(PostsContext);
+  const { save, cancel, post,  change, empty, edited } =
+    useContext(PostsContext);
+
   const firstFocusEl = useRef(null);
 
   const handleSubmit = (evt) => {
     firstFocusEl.current.focus();
-    submit();
+    save();
   };
 
   const handleReset = (evt) => {
@@ -25,14 +22,13 @@ function PostForm() {
     change({ name, value });
   };
 
-
-//   useEffect(() => {
-//     //отслеживание состаяние редактируюмого поста
-//     if (typeof onFormEdit === 'function') {
-//       onFormEdit(edited);
-//     }
-//     setPost(edited);
-//   }, [edited, onFormEdit, edit]);
+  //   useEffect(() => {
+  //     //отслеживание состаяние редактируюмого поста
+  //     if (typeof change === 'function') {
+  //       change(edited);
+  //     }
+  //     setPost(edited);
+  //   }, [edited, change, edit]);
 
   return (
     <div>
