@@ -9,7 +9,7 @@ function Wall() {
       <PostForm />
       {posts.map((post) => (
         <div key={post.id}>
-          <Post />
+          <Post post={post}/>
         </div>
       ))}
     </>

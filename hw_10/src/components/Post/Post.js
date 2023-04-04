@@ -1,10 +1,13 @@
 import Tags from '../Tags/Tags';
 import './Post.css';
-import PostsProvider from '../../contexts/PostsProvider';
+import React , {useContext} from 'react';
+import PostsContext from '../../contexts/PostsContext';
 
 function Post({ post }) {
-  const { author, photo } = post;
+  const { author, photo  , tags} = post;
   const { like, remove, toggleVisibility, edit } = useContext(PostsContext);
+  const likeState = post.likedByMe ? 'liked' : 'unliked';
+  const hideButtonState = !post.hidden ? 'скрыть' : 'показать';
 
   const handleClick = () => {
     //Обработчик для удаления поста
