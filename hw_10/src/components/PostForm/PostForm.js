@@ -2,14 +2,27 @@ import React, { useRef, useContext } from 'react';
 import PostsContext from '../../contexts/PostsContext';
 
 function PostForm() {
-  const { save, cancel, post,  change, empty, edited } =
-    useContext(PostsContext);
+  const { save, cancel, change, empty, edited } = useContext(PostsContext);
 
   const firstFocusEl = useRef(null);
 
   const handleSubmit = (evt) => {
+    evt.preventDefault();
+    const parsed =
+      edited.tags
+        ?.map((o) => o.replace('#', ''))
+        .filter((o) => o.trim() !== '') || [];
+
+    const tags = parsed.length > 0 ? parsed : null;
+    const photo = { url: edited.photo?.url, alt: edited.photo?.alt || '' };
+    save({
+      ...edited,
+      id: edited.id ? edited.id : Date.now(),
+      created: edited ? edited.created : Date.now(),
+      tags,
+      photo: !photo.url ? null : photo,
+    });
     firstFocusEl.current.focus();
-    save();
   };
 
   const handleReset = (evt) => {
@@ -29,37 +42,38 @@ function PostForm() {
   //     }
   //     setPost(edited);
   //   }, [edited, change, edit]);
-
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <textarea
           name="content"
           placeholder="content"
-          value={post?.content || ''}
+          value={edited?.content || ''}
           onChange={handleChange}
           ref={firstFocusEl}
         ></textarea>
         <input
           name="tags"
           placeholder="tags"
-          value={post?.tags?.join(' ') || ''}
+          value={edited?.tags?.join(' ') || ''}
           onChange={handleChange}
         ></input>
         <input
           name="photo"
           placeholder="photo"
-          value={post?.photo?.url || ''}
+          value={edited?.photo?.url || ''}
           onChange={handleChange}
         ></input>
         <input
           name="alt"
           placeholder="alt"
-          value={post?.photo?.alt || ''}
+          value={edited?.photo?.alt || ''}
           onChange={handleChange}
         ></input>
         <button>Ok</button>
-        {edited !== empty && <button onClick={handleReset}>Отменить</button>}
+        {edited.id !== empty.id && (
+          <button onClick={handleReset}>Отменить</button>
+        )}
       </form>
     </div>
   );

@@ -81,18 +81,21 @@ export default function PostsProvider(props) {
   };
 
   const save = (post) => {
+    console.log(post);
     //Сохранение поста
-    if (edited?.id === 0) {
+    const exitedPost = posts.find((item) => item.id === post.id);
+    if (post?.id !== empty.id && exitedPost?.id !== post.id) {
       setPosts((prevState) => [{ ...post }, ...prevState]);
       setEdited(empty);
       return;
     }
+
     setPosts((prevState) =>
       prevState.map((o) => {
-        if (o.id !== post.id) {
-          return 0;
+        if (o.id === post.id) {
+          return { ...post };
         }
-        return { ...post };
+        return { ...o };
       })
     );
     setEdited(empty);
@@ -109,8 +112,45 @@ export default function PostsProvider(props) {
 
   const change = (post) => {
     //Обработчик форма редактирование
-    setEdited(post);
+    const { name, value } = post;
+    if (name === 'tags') {
+      setEdited((prevState) => ({ ...prevState, [name]: value.split(' ') }));
+      return;
+    }
+
+    if (name === 'photo') {
+      setEdited((prevState) => {
+        const nextState = { ...prevState };
+        if (nextState.photo) {
+          nextState.photo.url = value;
+          return nextState;
+        }
+        nextState.photo = { url: value };
+        return nextState;
+      });
+      return;
+    }
+
+    if (name === 'alt') {
+      setEdited((prevState) => {
+        const nextState = { ...prevState };
+
+        if (nextState.photo) {
+          nextState.photo.alt = value;
+          return nextState;
+        }
+        nextState.photo = { alt: value };
+        return nextState;
+      });
+      return;
+    }
+
+    setEdited((prevState) => {
+      return { ...prevState, [name]: value };
+    });
   };
+
+  const like = (post) => {};
 
   const cancel = () => {
     //Обработчик отмена редактирование
@@ -125,6 +165,10 @@ export default function PostsProvider(props) {
     change,
     cancel,
     edit,
+    like,
+    edited,
+    setEdited,
+    empty,
   };
 
   return (
