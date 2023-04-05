@@ -5,6 +5,7 @@ import { editCancel, editChange, editSubmit } from '../../store/actions';
 function PostForm() {
   const dispatch = useDispatch();
   const edited = useSelector((state) => state.edited, shallowEqual);
+  const empty = useSelector((state) => state.empty, shallowEqual);
 
   const firstFocusEl = useRef(null);
 
