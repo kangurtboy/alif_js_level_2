@@ -52,7 +52,7 @@ export const initialState = {
   empty,
 };
 
-export const reducer = (state, action) => {
+export const reducer = (state = initialState , action) => {
   switch (action.type) {
     case POST_EDIT_SUBMIT:
       return reduceSubmit(state, action);

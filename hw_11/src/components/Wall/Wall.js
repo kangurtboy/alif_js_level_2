@@ -1,15 +1,15 @@
 import Post from './../Post/Post';
 import PostForm from '../PostForm/PostForm';
 import React, { useContext } from 'react';
-import PostsContext from '../../contexts/PostsContext';
+import { shallowEqual, useSelector } from 'redux';
 function Wall() {
-  const { state: {posts} } = useContext(PostsContext);
+  const posts = useSelector((state) => state.posts, shallowEqual);
   return (
     <>
       <PostForm />
       {posts.map((post) => (
         <div key={post.id}>
-          <Post post={post}/>
+          <Post post={post} />
         </div>
       ))}
     </>

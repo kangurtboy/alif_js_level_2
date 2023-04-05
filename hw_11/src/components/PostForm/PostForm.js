@@ -1,13 +1,11 @@
 import React, { useRef, useContext } from 'react';
-import PostsContext from '../../contexts/PostsContext';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { editCancel, editChange, editSubmit } from '../../store/actions';
 
 function PostForm() {
-  const {
-    state: { edited, empty },
-    dispatch,
-  } = useContext(PostsContext);
-  
+  const dispatch = useDispatch();
+  const edited = useSelector((state) => state.edited, shallowEqual);
+
   const firstFocusEl = useRef(null);
 
   const handleSubmit = (evt) => {
@@ -24,16 +22,10 @@ function PostForm() {
 
   const handleChange = (evt) => {
     const { name, value } = evt.target;
-	
-      dispatch(editChange( name, value ));
+
+    dispatch(editChange(name, value));
   };
-  //   useEffect(() => {
-  //     //отслеживание состаяние редактируюмого поста
-  //     if (typeof change === 'function') {
-  //       change(edited);
-  //     }
-  //     setPost(edited);
-  //   }, [edited, change, edit]);
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
