@@ -125,10 +125,10 @@ const reduceSubmit = (state) => {
 };
 
 const reduceCancel = (state) => {
-	return {
-		...state,
-		['edited']: empty,
-	  };
+  return {
+    ...state,
+    ['edited']: empty,
+  };
 };
 
 const reduceEdit = (state, action) => {
@@ -165,6 +165,14 @@ const reduceHide = (state, action) => {};
 
 const reduceLike = (state, action) => {};
 
-const reduceRemove = (state, action) => {};
+const reduceRemove = (state, action) => {
+  const { posts } = state;
+  const { id } = action.payload;
+  const filtered = posts.filter((item) => item.id !== id);
+  return {
+    ...state,
+    ['posts']: filtered,
+  };
+};
 
 const reduceShow = (state, action) => {};
