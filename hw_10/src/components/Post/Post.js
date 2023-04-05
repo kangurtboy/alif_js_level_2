@@ -24,9 +24,9 @@ function Post({ post }) {
     dispatch(edit(post.id));
   };
 
-  //   const handleLike = () => {
-  //     like();
-  //   };
+  const handleLike = () => {
+    dispatch(like(post.id));
+  };
 
   return (
     <article>
@@ -44,7 +44,7 @@ function Post({ post }) {
 
         <button onClick={handleRemove}>удалить</button>
         <button onClick={handleHidding}>{hideButtonState}</button>
-        <button onClick={handleEdit}>Изментиь</button>
+        <button onClick={handleEdit}>изменить</button>
 
         <div>{post.created}</div>
         {post.hit && <span>HIT</span>}
@@ -64,6 +64,7 @@ function Post({ post }) {
                 alt="likes"
                 width="20"
                 height="20"
+                onClick={handleLike}
               />
               <span className="Post-likes-count">{post.likes}</span>
               {tags && <Tags tags={tags} />}

@@ -20,7 +20,7 @@ const empty = {
   content: '',
   photo: null,
   hit: true,
-  likes: 10,
+  likes: 1,
   likedByMe: true,
   hidden: false,
   tags: [],
@@ -29,40 +29,24 @@ const empty = {
 
 export const initialState = {
   posts: [
-    {
-      id: 2,
-      author: {
-        id: 3,
-        avatar: 'https://alif-skills.pro/media/logo_alif.svg',
-        name: 'Alif Skills',
-      },
-      content: 'Ну как, вы справились с домашкой?',
-      photo: null,
-      hit: true,
-      likedByMe: false,
-      likes: 0,
-      tags: ['deadline', 'homework'],
-      created: 1603774800,
-      hidden: false,
-    },
-    {
-      id: 1,
-      author: {
-        id: 1,
-        avatar: 'https://alif-skills.pro/media/logo_alif.svg',
-        name: 'Alif Skills',
-      },
-      content: null,
-      photo: {
-        url: 'https://alif-skills.pro/media/meme.jpg',
-        alt: 'Мем про дедлайн',
-      },
-      hit: true,
-      likes: 10,
-      likedByMe: true,
-      created: 1603501200,
-      hidden: true,
-    },
+    // {
+    //   id: 1,
+    //   author: {
+    //     id: 1,
+    //     avatar: 'https://alif-skills.pro/media/logo_alif.svg',
+    //     name: 'Alif Skills',
+    //   },
+    //   content: null,
+    //   photo: {
+    //     url: 'https://alif-skills.pro/media/meme.jpg',
+    //     alt: 'Мем про дедлайн',
+    //   },
+    //   hit: true,
+    //   likes: 10,
+    //   likedByMe: true,
+    //   created: 1603501200,
+    //   hidden: true,
+    // },
   ],
   edited: empty,
   empty,
@@ -133,7 +117,7 @@ const reduceCancel = (state) => {
 
 const reduceEdit = (state, action) => {
   const { id } = action.payload;
-  const { posts } = initialState;
+  const { posts } = state;
   const postToEddit = posts.find((item) => item.id === id);
   return {
     ...state,
@@ -163,7 +147,20 @@ const reduceChange = (state, action) => {
 
 const reduceHide = (state, action) => {};
 
-const reduceLike = (state, action) => {};
+const reduceLike = (state, action) => {
+  const { id } = action.payload;
+  const { posts } = state;
+  const postToLike = { ...posts.find((item) => item.id === id) };
+  postToLike.likedByMe = !postToLike.likedByMe;
+  const changedPosts = posts.map((item) => {
+    if (postToLike.id === item.id) {
+      item = postToLike;
+    }
+    return item;
+  });
+
+  return { ...state, posts: changedPosts };
+};
 
 const reduceRemove = (state, action) => {
   const { posts } = state;

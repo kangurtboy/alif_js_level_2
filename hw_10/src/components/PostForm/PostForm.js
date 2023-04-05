@@ -7,6 +7,7 @@ function PostForm() {
     state: { edited, empty },
     dispatch,
   } = useContext(PostsContext);
+  
   const firstFocusEl = useRef(null);
 
   const handleSubmit = (evt) => {
@@ -62,7 +63,7 @@ function PostForm() {
           onChange={handleChange}
         ></input>
         <button>Ok</button>
-        {edited.id !== empty.id && (
+        {edited?.id !== empty?.id && (
           <button onClick={handleReset}>Отменить</button>
         )}
       </form>
