@@ -1,6 +1,5 @@
 import Tags from '../Tags/Tags';
 import './Post.css';
-import React, { useContext } from 'react';
 import { useDispatch } from 'react-redux';
 import { edit, like, /* show, */ remove, hide } from '../../store/actions';
 function Post({ post }) {
