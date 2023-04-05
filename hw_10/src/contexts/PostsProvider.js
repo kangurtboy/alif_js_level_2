@@ -1,174 +1,91 @@
-import React, { useState } from 'react';
+import React, { useReducer, useMemo } from 'react';
 import PostsContext from './PostsContext';
-
-const empty = {
-  //Пустой пост по умолчанию
-  id: 0,
-  author: {
-    avatar: 'https://alif-skills.pro/media/logo_js.svg',
-    name: 'Alif',
-    id: 1,
-  },
-  content: '',
-  photo: null,
-  hit: true,
-  likes: 10,
-  likedByMe: true,
-  hidden: false,
-  tags: [],
-  created: 1603501200,
-};
+import { reducer, initialState } from '../store/reducers';
 
 export default function PostsProvider(props) {
-  const [posts, setPosts] = useState([
-    {
-      id: 2,
-      author: {
-        id: 3,
-        avatar: 'https://alif-skills.pro/media/logo_alif.svg',
-        name: 'Alif Skills',
-      },
-      content: 'Ну как, вы справились с домашкой?',
-      photo: null,
-      hit: true,
-      likedByMe: false,
-      likes: 0,
-      tags: ['deadline', 'homework'],
-      created: 1603774800,
-      hidden: false,
-    },
-    {
-      id: 1,
-      author: {
-        id: 1,
-        avatar: 'https://alif-skills.pro/media/logo_alif.svg',
-        name: 'Alif Skills',
-      },
-      content: null,
-      photo: {
-        url: 'https://alif-skills.pro/media/meme.jpg',
-        alt: 'Мем про дедлайн',
-      },
-      hit: true,
-      likes: 10,
-      likedByMe: true,
-      created: 1603501200,
-      hidden: true,
-    },
-  ]);
-  const [edited, setEdited] = useState(empty);
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const value = useMemo(() => ({ state, dispatch }), [state]);
+  // const { posts, empty, edited } = state;
 
-  const remove = (postID) => {
-    //Обработчик удаления поста
-    setPosts((prev) => {
-      return prev.filter((prevPost) => postID !== prevPost.id);
-    });
-  };
+  //   const remove = (postID) => {
+  //     //Обработчик удаления поста
 
-  const toggleVisiblity = (postID) => {
-    //Обработчик скыритие поста
-    setPosts((prevState) => {
-      return prevState.map((item) => {
-        const post = item;
-        const hidden = !post.hidden;
+  //     return posts.filter((item) => postID !== item.id);
+  //   };
 
-        if (post.id === postID) {
-          return { ...post, hidden };
-        }
-        return item;
-      });
-    });
-  };
+  //   const toggleVisiblity = (postID) => {
+  //     //Обработчик скыритие поста
+  //     return posts.map((item) => {
+  //       const post = item;
+  //       const hidden = !post.hidden;
 
-  const save = (post) => {
-    //Сохранение поста
-    const exitedPost = posts.find((item) => item.id === post.id);
-    if (post?.id !== empty.id && exitedPost?.id !== post.id) {
-      setPosts((prevState) => [{ ...post }, ...prevState]);
-      setEdited(empty);
-      return;
-    }
+  //       if (post.id === postID) {
+  //         return { ...post, hidden };
+  //       }
+  //       return item;
+  //     });
+  //   };
 
-    setPosts((prevState) =>
-      prevState.map((o) => {
-        if (o.id === post.id) {
-          return { ...post };
-        }
-        return { ...o };
-      })
-    );
-    setEdited(empty);
-    return;
-  };
+  // //   const save = (post) => {
+  // //     //Сохранение поста
+  // //     const exitedPost = posts.find((item) => item.id === post.id);
 
-  const edit = (post) => {
-    //Обработчик на кнопке изменить
-    setEdited(() => {
-      const nextState = posts.find((item) => item.id === post);
-      return nextState;
-    });
-  };
+  // //     if (post?.id !== empty.id && exitedPost?.id !== post.id) {
+  // //       return [{ ...post }, ...posts];
+  // //     }
 
-  const change = (post) => {
-    //Обработчик форма редактирование
-    const { name, value } = post;
-    if (name === 'tags') {
-      setEdited((prevState) => ({ ...prevState, [name]: value.split(' ') }));
-      return;
-    }
+  // //     return posts.map((o) => {
+  // //       if (o.id === post.id) {
+  // //         return { ...post };
+  // //       }
+  // //       return { ...o };
+  // //     });
+  // //   };
 
-    if (name === 'photo') {
-      setEdited((prevState) => {
-        const nextState = { ...prevState };
-        if (nextState.photo) {
-          nextState.photo.url = value;
-          return nextState;
-        }
-        nextState.photo = { url: value };
-        return nextState;
-      });
-      return;
-    }
+  //   const edit = (post) => {
+  //     //Обработчик на кнопке изменить
+  //     const nextState = posts.find((item) => item.id === post);
+  //     return nextState;
+  //   };
 
-    if (name === 'alt') {
-      setEdited((prevState) => {
-        const nextState = { ...prevState };
+  //   const change = (post) => {
+  //     //Обработчик форма редактирование
+  //     const { name, value } = post;
+  //     if (name === 'tags') {
+  //       edited = { ...edited, [name]: value.split(' ') };
+  //       return;
+  //     }
 
-        if (nextState.photo) {
-          nextState.photo.alt = value;
-          return nextState;
-        }
-        nextState.photo = { alt: value };
-        return nextState;
-      });
-      return;
-    }
+  //     if (name === 'photo') {
+  //       const nextState = { ...post };
+  //       if (nextState.photo) {
+  //         nextState.photo.url = value;
+  //         return nextState;
+  //       }
+  //       nextState.photo = { url: value };
+  //       return nextState;
+  //     }
 
-    setEdited((prevState) => {
-      return { ...prevState, [name]: value };
-    });
-  };
+  //     if (name === 'alt') {
+  //       const nextState = { ...post };
 
-  const like = (post) => {};
+  //       if (nextState.photo) {
+  //         nextState.photo.alt = value;
+  //         return nextState;
+  //       }
+  //       nextState.photo = { alt: value };
+  //       return nextState;
+  //     }
 
-  const cancel = () => {
-    //Обработчик отмена редактирование
-    setEdited(empty);
-  };
+  //     return { ...post, [name]: value };
+  //   };
 
-  const value = {
-    posts,
-    remove,
-    toggleVisiblity,
-    save,
-    change,
-    cancel,
-    edit,
-    like,
-    edited,
-    setEdited,
-    empty,
-  };
+  //   // const like = (post) => {};
+
+  //   const cancel = () => {
+  //     //Обработчик отмена редактирование
+  //     edited = empty;
+  //   };
 
   return (
     <PostsContext.Provider value={value}>

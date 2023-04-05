@@ -1,40 +1,31 @@
 import React, { useRef, useContext } from 'react';
 import PostsContext from '../../contexts/PostsContext';
+import { editCancel, editChange, editSubmit } from '../../store/actions';
 
 function PostForm() {
-  const { save, cancel, change, empty, edited } = useContext(PostsContext);
-
+  const {
+    state: { edited, empty },
+    dispatch,
+  } = useContext(PostsContext);
   const firstFocusEl = useRef(null);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    const parsed =
-      edited.tags
-        ?.map((o) => o.replace('#', ''))
-        .filter((o) => o.trim() !== '') || [];
 
-    const tags = parsed.length > 0 ? parsed : null;
-    const photo = { url: edited.photo?.url, alt: edited.photo?.alt || '' };
-    save({
-      ...edited,
-      id: edited.id ? edited.id : Date.now(),
-      created: edited ? edited.created : Date.now(),
-      tags,
-      photo: !photo.url ? null : photo,
-    });
+    dispatch(editSubmit());
     firstFocusEl.current.focus();
   };
 
   const handleReset = (evt) => {
     evt.preventDefault();
-    cancel();
+    dispatch(editCancel());
   };
 
   const handleChange = (evt) => {
     const { name, value } = evt.target;
-    change({ name, value });
+	
+      dispatch(editChange( name, value ));
   };
-
   //   useEffect(() => {
   //     //отслеживание состаяние редактируюмого поста
   //     if (typeof change === 'function') {

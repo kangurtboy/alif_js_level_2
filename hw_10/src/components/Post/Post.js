@@ -5,7 +5,7 @@ import PostsContext from '../../contexts/PostsContext';
 
 function Post({ post }) {
   const { author, photo  , tags} = post;
-  const { like, remove, toggleVisiblity, edit } = useContext(PostsContext);
+  const { remove, toggleVisiblity, edit } = useContext(PostsContext);
   const likeState = post.likedByMe ? 'liked' : 'unliked';
   const hideButtonState = !post.hidden ? 'скрыть' : 'показать';
 
@@ -24,9 +24,9 @@ function Post({ post }) {
     edit(post.id);
   };
 
-  const handleLike = () => {
-    like();
-  };
+//   const handleLike = () => {
+//     like();
+//   };
 
   return (
     <article>

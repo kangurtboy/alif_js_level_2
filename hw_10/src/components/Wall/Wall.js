@@ -3,7 +3,7 @@ import PostForm from '../PostForm/PostForm';
 import React, { useContext } from 'react';
 import PostsContext from '../../contexts/PostsContext';
 function Wall() {
-  const { posts } = useContext(PostsContext);
+  const { state: {posts} } = useContext(PostsContext);
   return (
     <>
       <PostForm />
