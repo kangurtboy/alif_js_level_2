@@ -128,7 +128,15 @@ const reduceCancel = (state, action) => {
   return state;
 };
 
-const reduceEdit = (state, action) => {};
+const reduceEdit = (state, action) => {
+  const { id } = action.payload;
+  const { posts } = initialState;
+  const postToEddit = posts.find((item) => item.id === id);
+  return {
+    ...state,
+    ['edited']: postToEddit,
+  };
+};
 
 const reduceChange = (state, action) => {
   const { edited } = state;

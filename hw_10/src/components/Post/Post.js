@@ -1,32 +1,32 @@
 import Tags from '../Tags/Tags';
 import './Post.css';
-import React , {useContext} from 'react';
+import React, { useContext } from 'react';
 import PostsContext from '../../contexts/PostsContext';
-
+import { edit, like, show, remove, hide } from '../../store/actions';
 function Post({ post }) {
-  const { author, photo  , tags} = post;
-  const { remove, toggleVisiblity, edit } = useContext(PostsContext);
+  const { dispatch } = useContext(PostsContext);
+  const { author, photo, tags } = post;
   const likeState = post.likedByMe ? 'liked' : 'unliked';
   const hideButtonState = !post.hidden ? 'скрыть' : 'показать';
 
-  const handleClick = () => {
+  const handleRemove = () => {
     //Обработчик для удаления поста
-    remove(post.id);
+    dispatch(remove(post.id));
   };
 
   const handleHidding = () => {
     //Обработчик для переключение видимости поста
-    toggleVisiblity(post.id);
+    dispatch(hide(post.id));
   };
 
   const handleEdit = () => {
     //Обработчик для редактирование выбраного поста
-    edit(post.id);
+    dispatch(edit(post.id));
   };
 
-//   const handleLike = () => {
-//     like();
-//   };
+  //   const handleLike = () => {
+  //     like();
+  //   };
 
   return (
     <article>
@@ -42,7 +42,7 @@ function Post({ post }) {
         )}
         <h5>{author.name}</h5>
 
-        <button onClick={handleClick}>удалить</button>
+        <button onClick={handleRemove}>удалить</button>
         <button onClick={handleHidding}>{hideButtonState}</button>
         <button onClick={handleEdit}>Изментиь</button>
 
