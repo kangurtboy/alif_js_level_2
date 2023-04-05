@@ -2,7 +2,7 @@ import Tags from '../Tags/Tags';
 import './Post.css';
 import React, { useContext } from 'react';
 import PostsContext from '../../contexts/PostsContext';
-import { edit, like, show, remove, hide } from '../../store/actions';
+import { edit, like, /* show, */ remove, hide } from '../../store/actions';
 function Post({ post }) {
   const { dispatch } = useContext(PostsContext);
   const { author, photo, tags } = post;

@@ -111,7 +111,7 @@ const reduceSubmit = (state) => {
 const reduceCancel = (state) => {
   return {
     ...state,
-    ['edited']: empty,
+    edited: empty,
   };
 };
 
@@ -121,7 +121,7 @@ const reduceEdit = (state, action) => {
   const postToEddit = posts.find((item) => item.id === id);
   return {
     ...state,
-    ['edited']: postToEddit,
+    edited: postToEddit,
   };
 };
 
@@ -168,7 +168,7 @@ const reduceRemove = (state, action) => {
   const filtered = posts.filter((item) => item.id !== id);
   return {
     ...state,
-    ['posts']: filtered,
+    posts: filtered,
   };
 };
 
