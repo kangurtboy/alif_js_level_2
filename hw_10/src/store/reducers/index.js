@@ -91,7 +91,7 @@ export const reducer = (state, action) => {
   }
 };
 
-const reduceSubmit = (state, action) => {
+const reduceSubmit = (state) => {
   const { edited, posts } = state;
   const parsed =
     edited.tags
@@ -124,8 +124,11 @@ const reduceSubmit = (state, action) => {
   };
 };
 
-const reduceCancel = (state, action) => {
-  return state;
+const reduceCancel = (state) => {
+	return {
+		...state,
+		['edited']: empty,
+	  };
 };
 
 const reduceEdit = (state, action) => {
